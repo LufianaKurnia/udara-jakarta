@@ -28,11 +28,13 @@ def get_setting(name, default=None):
         pass
     return default
 
-
 def postgres_url():
     full = get_setting("POSTGRES_URL")
     if full:
-        return make_url(full)
+        url = make_url(full)
+        if url.drivername == "postgresql":  # <-- BARU: paksa pakai psycopg2
+            url = url.set(drivername="postgresql+psycopg2")
+        return url
     query = {}
     if get_setting("PG_SSLMODE"):
         query["sslmode"] = get_setting("PG_SSLMODE")
@@ -50,7 +52,10 @@ def postgres_url():
 def mysql_url():
     full = get_setting("MYSQL_URL")
     if full:
-        return make_url(full)
+        url = make_url(full)
+        if url.drivername == "mysql":  # <-- BARU: paksa pakai mysql-connector
+            url = url.set(drivername="mysql+mysqlconnector")
+        return url
     driver = get_setting("MYSQL_DRIVER", "mysqlconnector")
     return URL.create(
         f"mysql+{driver}",
