@@ -17,19 +17,21 @@ https://ws.jakarta.go.id/gateway/DataPortalSatuDataJakarta/1.0/satudata?kategori
 ## 2. Arsitektur
 
 DBMS 1 – Fakta | PostgreSQL (Postgres.app) | `ispu_harian` | Volume data tumbuh, query analitik, `UPSERT` (`ON CONFLICT`) |
+
 DBMS 2 – Master | MySQL/MariaDB (XAMPP) | `stasiun`, `kategori_ispu`, `parameter_pencemar` | Data referensi kecil & stabil |
 
 flowchart LR
-API[API Satu Data Jakarta] -->|requests| ETL[db/seed_data.py lean_api_records]
-ETL -->|fakta| PG[(PostgreSQL ispu_harian)]
-ETL -->|seed master| MY[(MySQL stasiun, kategori_ispu, parameter_pencemar)]
-PG -->|SQLAlchemy + psycopg2| APP[app.py - Pandas merge]
-MY -->|SQLAlchemy + mysql-connector| APP
-APP --> UI[Streamlit + Plotly]
 
-PostgreSQL.ispu_harian.kode_stasiun -> MySQL.stasiun.kode_stasiun
-PostgreSQL.ispu_harian.kategori -> MySQL.kategori_ispu.kategori
-PostgreSQL.ispu_harian.parameter_kritis -> MySQL.parameter_pencemar.kode_parameter
+- API[API Satu Data Jakarta] -->|requests| ETL[db/seed_data.py lean_api_records]
+- ETL -->|fakta| PG[(PostgreSQL ispu_harian)]
+- ETL -->|seed master| MY[(MySQL stasiun, kategori_ispu, parameter_pencemar)]
+- PG -->|SQLAlchemy + psycopg2| APP[app.py - Pandas merge]
+- MY -->|SQLAlchemy + mysql-connector| APP
+- APP --> UI[Streamlit + Plotly]
+
+- PostgreSQL.ispu_harian.kode_stasiun -> MySQL.stasiun.kode_stasiun
+- PostgreSQL.ispu_harian.kategori -> MySQL.kategori_ispu.kategori
+- PostgreSQL.ispu_harian.parameter_kritis -> MySQL.parameter_pencemar.kode_parameter
 
 ## 3. Fitur interaktif
 
