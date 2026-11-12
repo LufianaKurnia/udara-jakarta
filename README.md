@@ -3,7 +3,9 @@
 Dashboard web interaktif (Python + Streamlit + Plotly) yang menggabungkan data dari dua database berbeda (MYSQL dan Postgresql)
 
 NAMA: Lufiana Kurnia
+
 KELAS: IF-7B
+
 NIM: 230660121149
 
 ## 1. DATA SUMBER
